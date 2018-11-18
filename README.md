@@ -1,44 +1,74 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# The Legendary Manager Webapp
 
-## Available Scripts
+> Webapp of the best todo app evverrr
+
+The webapp. React, GraphQL, Apollo Client.
+
+## Getting started
+
+This webapp is used together with [legendary-manager-api](https://github.com/cherrybeans/legendary-manager-api), so go ahead and set that one up if you want to run this properly.
+
+### Setting up
+
+I use `yarn`, but you may use `npm` instead with the equivalent commands.
+
+Clone the project and install dependencies as such:
+
+```sh
+$ git clone git@github.com:cherrybeans/legendary-manager-webapp.git # or if not using ssh git clone https://github.com/cherrybeans/legendary-manager-webapp.git
+$ cd legendary-manager-webapp
+$ yarn # install the project dependencies
+```
+
+Then you can run the server with `yarn start` and go to [localhost:3030](http://localhost:3030) to view webapp.
+
+### Useful scripts
 
 In the project directory, you can run:
 
-### `npm start`
+#### `yarn start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> If you get an error mentioning that a module cannot be found, use the following command instead:
+> `NODE_PATH=src/ && yarn start`
+> This error happens because on some machines the configuration that gives us absolute imports is not being set correctly, and you need to manually set the config in your terminal.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Runs the app in the development mode. Open [http://localhost:3030](http://localhost:3030) to view it in the browser.
 
-### `npm test`
+The page will reload if you make changes to the project. You will also see any lint errors in the console.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### `yarn build`
 
-### `npm run build`
+Builds the app for production to the `build` folder. It correctly bundles React in production mode and optimizes the build for the best performance.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## A little noob guide on deploying on a Linux server
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Prerequisites
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+You'll need [node](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-18-04) and `yarn` (to make use of the lock file, though you may use npm).
+You'll also need some tool to host it. We have used `Apache` to host this project. If you haven’t already installed it on your server, install it with `sudo apt install apache2` or use another tool.
 
-### `npm run eject`
+### Frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+First, make sure that `index.js` uses the production uri for linking the frontend to the server. It should be:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+const client = new ApolloClient({
+  uri: "exampledomain.com:4000/graphql"
+});
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+From your root folder, do the following:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```sh
+$ yarn build
+$ scp -r build <username>@exampledomain.com:~  # Copies the build folder to your home directory on the server
+```
 
-## Learn More
+Then ssh into your server: `ssh <username>@exampledomain.com`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+$ sudo mv build /var/www/html/
+$ sudo mv /var/www/html/build /var/www/html/prosjekt4
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Now hopefully everything is up and running! The API should be up and running on [http://exampledomain.com:4000/graphql](http://exampledomain.com:4000/graphql).

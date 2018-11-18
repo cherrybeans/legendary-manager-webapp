@@ -1,6 +1,14 @@
 {
   "name": "legendary-manager-webapp",
+  "author": "Sigrid Marita Kvamme <sigridkvamme@gmail.com>",
   "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "keywords": [
+    "graphql",
+    "react",
+    "apollo client"
+  ],
   "private": true,
   "dependencies": {
     "react": "^16.6.3",
